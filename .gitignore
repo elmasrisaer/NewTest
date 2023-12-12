@@ -1,0 +1,14 @@
+/*
+!/docs
+!/src
+!/.eslintrc.js
+!/.gitattributes
+!/.gitignore
+!/.npmignore
+!/files.gen
+!/gen.yaml
+!/package.json
+!/package-lock.json
+!/tsconfig.json
+!/README.md
+!/USAGE.md

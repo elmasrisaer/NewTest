@@ -1,0 +1,36 @@
+{
+  "type": "commonjs",
+  "name": "CELITECH",
+  "version": "0.1.0",
+  "author": "Test2",
+  "main": "./index.js",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/elmasrisaer/NewTest.git",
+    "directory": "."
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": "./cjs/index.js",
+    "./*.js": "./cjs/*.js",
+    "./*": "./cjs/*/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build && cp -r src/. cjs/. ./"
+  },
+  "keywords": [],
+  "peerDependencies": {
+    "zod": ">= 3"
+  },
+  "devDependencies": {
+    "@types/jsonpath": "^0.2.4",
+    "typescript": "^5.3.3",
+    "zod": "^3.22.4"
+  },
+  "dependencies": {
+    "decimal.js": "^10.4.3",
+    "jsonpath": "^1.1.1"
+  }
+}
