@@ -3,6 +3,7 @@ src/sdk/packages.ts
 src/sdk/purchases.ts
 src/sdk/esim.ts
 src/sdk/sdk.ts
+.eslintrc.js
 .npmignore
 package-lock.json
 package.json

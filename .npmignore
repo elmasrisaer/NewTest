@@ -4,9 +4,5 @@
 !/**/*.js
 !/**/*.map
 
-/*.js
-!/index.js
-/*.ts
-!/index.ts
-
+/.eslintrc.js
 /src

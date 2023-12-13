@@ -1,7 +1,7 @@
 {
   "type": "commonjs",
   "name": "CELITECH",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Test2",
   "main": "./index.js",
   "sideEffects": false,
@@ -17,14 +17,20 @@
     "./*": "./cjs/*/index.js"
   },
   "scripts": {
+    "lint": "eslint --max-warnings=0 src",
     "build": "tsc",
-    "prepublishOnly": "npm run build && cp -r src/. cjs/. ./"
+    "prepack": "npm run build && cp -r src/. cjs/. ./"
   },
   "keywords": [],
   "peerDependencies": {
     "zod": ">= 3"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.13.2",
+    "@typescript-eslint/parser": "^6.13.2",
+    "eslint": "^8.55.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.0",
     "@types/jsonpath": "^0.2.4",
     "typescript": "^5.3.3",
     "zod": "^3.22.4"
