@@ -18,6 +18,7 @@ src/lib/security.ts
 src/lib/url.ts
 src/sdk/index.ts
 src/models/errors/sdkerror.ts
+src/types/blobs.ts
 src/types/decimal.ts
 src/types/index.ts
 src/types/operations.ts

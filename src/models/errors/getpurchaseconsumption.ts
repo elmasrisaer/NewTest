@@ -96,22 +96,52 @@ export namespace GetPurchaseConsumptionPurchasesResponseBody$ {
         message?: string | undefined;
         RawResponse?: Response | undefined;
     };
-    export type Outbound = {
-        message?: string | undefined;
-        rawResponse?: Response | undefined;
-    };
 
-    export const inboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<
+        GetPurchaseConsumptionPurchasesResponseBody,
+        z.ZodTypeDef,
+        Inbound
+    > = z
         .object({
             message: z.string().optional(),
             RawResponse: z.instanceof(Response).optional(),
         })
         .transform((v) => {
-            return {
+            return new GetPurchaseConsumptionPurchasesResponseBody({
                 ...(v.message === undefined ? null : { message: v.message }),
                 ...(v.RawResponse === undefined ? null : { rawResponse: v.RawResponse }),
-            };
+            });
         });
+    export type Outbound = {
+        message?: string | undefined;
+        RawResponse?: never | undefined;
+    };
+
+    export const outboundSchema: z.ZodType<
+        Outbound,
+        z.ZodTypeDef,
+        GetPurchaseConsumptionPurchasesResponseBody
+    > = z
+        .instanceof(GetPurchaseConsumptionPurchasesResponseBody)
+        .transform((v) => v.data$)
+        .pipe(
+            z
+                .object({
+                    message: z.string().optional(),
+                    rawResponse: z
+                        .instanceof(Response)
+                        .transform(() => {
+                            throw new Error("Response cannot be serialized");
+                        })
+                        .optional(),
+                })
+                .transform((v) => {
+                    return {
+                        ...(v.message === undefined ? null : { message: v.message }),
+                        ...(v.rawResponse === undefined ? null : { RawResponse: v.rawResponse }),
+                    };
+                })
+        );
 }
 
 /** @internal */
@@ -120,20 +150,50 @@ export namespace GetPurchaseConsumptionResponseBody$ {
         message?: string | undefined;
         RawResponse?: Response | undefined;
     };
-    export type Outbound = {
-        message?: string | undefined;
-        rawResponse?: Response | undefined;
-    };
 
-    export const inboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<
+        GetPurchaseConsumptionResponseBody,
+        z.ZodTypeDef,
+        Inbound
+    > = z
         .object({
             message: z.string().optional(),
             RawResponse: z.instanceof(Response).optional(),
         })
         .transform((v) => {
-            return {
+            return new GetPurchaseConsumptionResponseBody({
                 ...(v.message === undefined ? null : { message: v.message }),
                 ...(v.RawResponse === undefined ? null : { rawResponse: v.RawResponse }),
-            };
+            });
         });
+    export type Outbound = {
+        message?: string | undefined;
+        RawResponse?: never | undefined;
+    };
+
+    export const outboundSchema: z.ZodType<
+        Outbound,
+        z.ZodTypeDef,
+        GetPurchaseConsumptionResponseBody
+    > = z
+        .instanceof(GetPurchaseConsumptionResponseBody)
+        .transform((v) => v.data$)
+        .pipe(
+            z
+                .object({
+                    message: z.string().optional(),
+                    rawResponse: z
+                        .instanceof(Response)
+                        .transform(() => {
+                            throw new Error("Response cannot be serialized");
+                        })
+                        .optional(),
+                })
+                .transform((v) => {
+                    return {
+                        ...(v.message === undefined ? null : { message: v.message }),
+                        ...(v.rawResponse === undefined ? null : { RawResponse: v.rawResponse }),
+                    };
+                })
+        );
 }

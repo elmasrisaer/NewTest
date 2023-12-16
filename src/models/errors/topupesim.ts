@@ -96,22 +96,47 @@ export namespace TopUpeSIMPurchasesResponseBody$ {
         message?: string | undefined;
         RawResponse?: Response | undefined;
     };
-    export type Outbound = {
-        message?: string | undefined;
-        rawResponse?: Response | undefined;
-    };
 
-    export const inboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<TopUpeSIMPurchasesResponseBody, z.ZodTypeDef, Inbound> = z
         .object({
             message: z.string().optional(),
             RawResponse: z.instanceof(Response).optional(),
         })
         .transform((v) => {
-            return {
+            return new TopUpeSIMPurchasesResponseBody({
                 ...(v.message === undefined ? null : { message: v.message }),
                 ...(v.RawResponse === undefined ? null : { rawResponse: v.RawResponse }),
-            };
+            });
         });
+    export type Outbound = {
+        message?: string | undefined;
+        RawResponse?: never | undefined;
+    };
+
+    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, TopUpeSIMPurchasesResponseBody> =
+        z
+            .instanceof(TopUpeSIMPurchasesResponseBody)
+            .transform((v) => v.data$)
+            .pipe(
+                z
+                    .object({
+                        message: z.string().optional(),
+                        rawResponse: z
+                            .instanceof(Response)
+                            .transform(() => {
+                                throw new Error("Response cannot be serialized");
+                            })
+                            .optional(),
+                    })
+                    .transform((v) => {
+                        return {
+                            ...(v.message === undefined ? null : { message: v.message }),
+                            ...(v.rawResponse === undefined
+                                ? null
+                                : { RawResponse: v.rawResponse }),
+                        };
+                    })
+            );
 }
 
 /** @internal */
@@ -120,20 +145,42 @@ export namespace TopUpeSIMResponseBody$ {
         message?: string | undefined;
         RawResponse?: Response | undefined;
     };
-    export type Outbound = {
-        message?: string | undefined;
-        rawResponse?: Response | undefined;
-    };
 
-    export const inboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<TopUpeSIMResponseBody, z.ZodTypeDef, Inbound> = z
         .object({
             message: z.string().optional(),
             RawResponse: z.instanceof(Response).optional(),
         })
         .transform((v) => {
-            return {
+            return new TopUpeSIMResponseBody({
                 ...(v.message === undefined ? null : { message: v.message }),
                 ...(v.RawResponse === undefined ? null : { rawResponse: v.RawResponse }),
-            };
+            });
         });
+    export type Outbound = {
+        message?: string | undefined;
+        RawResponse?: never | undefined;
+    };
+
+    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, TopUpeSIMResponseBody> = z
+        .instanceof(TopUpeSIMResponseBody)
+        .transform((v) => v.data$)
+        .pipe(
+            z
+                .object({
+                    message: z.string().optional(),
+                    rawResponse: z
+                        .instanceof(Response)
+                        .transform(() => {
+                            throw new Error("Response cannot be serialized");
+                        })
+                        .optional(),
+                })
+                .transform((v) => {
+                    return {
+                        ...(v.message === undefined ? null : { message: v.message }),
+                        ...(v.rawResponse === undefined ? null : { RawResponse: v.rawResponse }),
+                    };
+                })
+        );
 }

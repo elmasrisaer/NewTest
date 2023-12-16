@@ -31,30 +31,41 @@ export class Purchases extends ClientSDK {
         input: operations.CreatePurchaseRequestBody | undefined,
         options?: RequestOptions
     ): Promise<operations.CreatePurchaseResponse> {
-        const headers = new Headers();
-        headers.set("user-agent", SDK_METADATA.userAgent);
-        headers.set("Content-Type", "application/json");
-        headers.set("Accept", "application/json");
+        const headers$ = new Headers();
+        headers$.set("user-agent", SDK_METADATA.userAgent);
+        headers$.set("Content-Type", "application/json");
+        headers$.set("Accept", "application/json");
 
-        const payload = operations.CreatePurchaseRequestBody$.outboundSchema
+        const payload$ = operations.CreatePurchaseRequestBody$.outboundSchema
             .optional()
             .parse(input);
-        const body =
-            payload === undefined ? null : enc$.encodeJSON("body", payload, { explode: true });
+        const body$ =
+            payload$ === undefined ? null : enc$.encodeJSON("body", payload$, { explode: true });
 
-        const path = this.templateURLComponent("/purchases")();
+        const path$ = this.templateURLComponent("/purchases")();
 
-        const security = this.options$.oAuth2ClientCredentials
-            ? { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials }
-            : {};
-        const securitySettings = this.resolveGlobalSecurity(security);
+        let security$;
+        if (typeof this.options$.oAuth2ClientCredentials === "function") {
+            security$ = { oAuth2ClientCredentials: await this.options$.oAuth2ClientCredentials() };
+        } else if (this.options$.oAuth2ClientCredentials) {
+            security$ = { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials };
+        } else {
+            security$ = {};
+        }
+        const securitySettings$ = this.resolveGlobalSecurity(security$);
 
         const response = await this.fetch$(
-            { security: securitySettings, method: "post", path, headers, body },
+            {
+                security: securitySettings$,
+                method: "post",
+                path: path$,
+                headers: headers$,
+                body: body$,
+            },
             options
         );
 
-        const responseFields = {
+        const responseFields$ = {
             ContentType: response.headers.get("content-type") ?? "application/octet-stream",
             StatusCode: response.status,
             RawResponse: response,
@@ -63,24 +74,24 @@ export class Purchases extends ClientSDK {
         if (this.matchResponse(response, 200, "application/json")) {
             const responseBody = await response.json();
             const result = operations.CreatePurchaseResponse$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 object: responseBody,
             });
             return result;
         } else if (this.matchResponse(response, 400, "application/json")) {
             const responseBody = await response.json();
             const result = errors.CreatePurchaseResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.CreatePurchaseResponseBody(result);
+            throw result;
         } else if (this.matchResponse(response, 401, "application/json")) {
             const responseBody = await response.json();
             const result = errors.CreatePurchasePurchasesResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.CreatePurchasePurchasesResponseBody(result);
+            throw result;
         } else {
             const responseBody = await response.text();
             throw new errors.SDKError("Unexpected API response", response, responseBody);
@@ -97,47 +108,59 @@ export class Purchases extends ClientSDK {
         input: operations.ListPurchasesRequest,
         options?: RequestOptions
     ): Promise<operations.ListPurchasesResponse> {
-        const headers = new Headers();
-        headers.set("user-agent", SDK_METADATA.userAgent);
-        headers.set("Accept", "application/json");
+        const headers$ = new Headers();
+        headers$.set("user-agent", SDK_METADATA.userAgent);
+        headers$.set("Accept", "application/json");
 
-        const payload = operations.ListPurchasesRequest$.outboundSchema.parse(input);
-        const body = null;
+        const payload$ = operations.ListPurchasesRequest$.outboundSchema.parse(input);
+        const body$ = null;
 
-        const path = this.templateURLComponent("/purchases")();
+        const path$ = this.templateURLComponent("/purchases")();
 
-        const query = [
-            enc$.encodeForm("after", payload.after, { explode: true, charEncoding: "percent" }),
-            enc$.encodeForm("afterCursor", payload.afterCursor, {
+        const query$ = [
+            enc$.encodeForm("after", payload$.after, { explode: true, charEncoding: "percent" }),
+            enc$.encodeForm("afterCursor", payload$.afterCursor, {
                 explode: true,
                 charEncoding: "percent",
             }),
-            enc$.encodeForm("afterDate", payload.afterDate, {
+            enc$.encodeForm("afterDate", payload$.afterDate, {
                 explode: true,
                 charEncoding: "percent",
             }),
-            enc$.encodeForm("before", payload.before, { explode: true, charEncoding: "percent" }),
-            enc$.encodeForm("beforeDate", payload.beforeDate, {
+            enc$.encodeForm("before", payload$.before, { explode: true, charEncoding: "percent" }),
+            enc$.encodeForm("beforeDate", payload$.beforeDate, {
                 explode: true,
                 charEncoding: "percent",
             }),
-            enc$.encodeForm("iccid", payload.iccid, { explode: true, charEncoding: "percent" }),
-            enc$.encodeForm("limit", payload.limit, { explode: true, charEncoding: "percent" }),
+            enc$.encodeForm("iccid", payload$.iccid, { explode: true, charEncoding: "percent" }),
+            enc$.encodeForm("limit", payload$.limit, { explode: true, charEncoding: "percent" }),
         ]
             .filter(Boolean)
             .join("&");
 
-        const security = this.options$.oAuth2ClientCredentials
-            ? { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials }
-            : {};
-        const securitySettings = this.resolveGlobalSecurity(security);
+        let security$;
+        if (typeof this.options$.oAuth2ClientCredentials === "function") {
+            security$ = { oAuth2ClientCredentials: await this.options$.oAuth2ClientCredentials() };
+        } else if (this.options$.oAuth2ClientCredentials) {
+            security$ = { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials };
+        } else {
+            security$ = {};
+        }
+        const securitySettings$ = this.resolveGlobalSecurity(security$);
 
         const response = await this.fetch$(
-            { security: securitySettings, method: "get", path, headers, query, body },
+            {
+                security: securitySettings$,
+                method: "get",
+                path: path$,
+                headers: headers$,
+                query: query$,
+                body: body$,
+            },
             options
         );
 
-        const responseFields = {
+        const responseFields$ = {
             ContentType: response.headers.get("content-type") ?? "application/octet-stream",
             StatusCode: response.status,
             RawResponse: response,
@@ -146,24 +169,24 @@ export class Purchases extends ClientSDK {
         if (this.matchResponse(response, 200, "application/json")) {
             const responseBody = await response.json();
             const result = operations.ListPurchasesResponse$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 object: responseBody,
             });
             return result;
         } else if (this.matchResponse(response, 400, "application/json")) {
             const responseBody = await response.json();
             const result = errors.ListPurchasesResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.ListPurchasesResponseBody(result);
+            throw result;
         } else if (this.matchResponse(response, 401, "application/json")) {
             const responseBody = await response.json();
             const result = errors.ListPurchasesPurchasesResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.ListPurchasesPurchasesResponseBody(result);
+            throw result;
         } else {
             const responseBody = await response.text();
             throw new errors.SDKError("Unexpected API response", response, responseBody);
@@ -180,28 +203,39 @@ export class Purchases extends ClientSDK {
         input: operations.TopUpeSIMRequestBody | undefined,
         options?: RequestOptions
     ): Promise<operations.TopUpeSIMResponse> {
-        const headers = new Headers();
-        headers.set("user-agent", SDK_METADATA.userAgent);
-        headers.set("Content-Type", "application/json");
-        headers.set("Accept", "application/json");
+        const headers$ = new Headers();
+        headers$.set("user-agent", SDK_METADATA.userAgent);
+        headers$.set("Content-Type", "application/json");
+        headers$.set("Accept", "application/json");
 
-        const payload = operations.TopUpeSIMRequestBody$.outboundSchema.optional().parse(input);
-        const body =
-            payload === undefined ? null : enc$.encodeJSON("body", payload, { explode: true });
+        const payload$ = operations.TopUpeSIMRequestBody$.outboundSchema.optional().parse(input);
+        const body$ =
+            payload$ === undefined ? null : enc$.encodeJSON("body", payload$, { explode: true });
 
-        const path = this.templateURLComponent("/purchases/topup")();
+        const path$ = this.templateURLComponent("/purchases/topup")();
 
-        const security = this.options$.oAuth2ClientCredentials
-            ? { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials }
-            : {};
-        const securitySettings = this.resolveGlobalSecurity(security);
+        let security$;
+        if (typeof this.options$.oAuth2ClientCredentials === "function") {
+            security$ = { oAuth2ClientCredentials: await this.options$.oAuth2ClientCredentials() };
+        } else if (this.options$.oAuth2ClientCredentials) {
+            security$ = { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials };
+        } else {
+            security$ = {};
+        }
+        const securitySettings$ = this.resolveGlobalSecurity(security$);
 
         const response = await this.fetch$(
-            { security: securitySettings, method: "post", path, headers, body },
+            {
+                security: securitySettings$,
+                method: "post",
+                path: path$,
+                headers: headers$,
+                body: body$,
+            },
             options
         );
 
-        const responseFields = {
+        const responseFields$ = {
             ContentType: response.headers.get("content-type") ?? "application/octet-stream",
             StatusCode: response.status,
             RawResponse: response,
@@ -210,24 +244,24 @@ export class Purchases extends ClientSDK {
         if (this.matchResponse(response, 200, "application/json")) {
             const responseBody = await response.json();
             const result = operations.TopUpeSIMResponse$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 object: responseBody,
             });
             return result;
         } else if (this.matchResponse(response, 400, "application/json")) {
             const responseBody = await response.json();
             const result = errors.TopUpeSIMResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.TopUpeSIMResponseBody(result);
+            throw result;
         } else if (this.matchResponse(response, 401, "application/json")) {
             const responseBody = await response.json();
             const result = errors.TopUpeSIMPurchasesResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.TopUpeSIMPurchasesResponseBody(result);
+            throw result;
         } else {
             const responseBody = await response.text();
             throw new errors.SDKError("Unexpected API response", response, responseBody);
@@ -244,28 +278,39 @@ export class Purchases extends ClientSDK {
         input: operations.EditPurchaseRequestBody | undefined,
         options?: RequestOptions
     ): Promise<operations.EditPurchaseResponse> {
-        const headers = new Headers();
-        headers.set("user-agent", SDK_METADATA.userAgent);
-        headers.set("Content-Type", "application/json");
-        headers.set("Accept", "application/json");
+        const headers$ = new Headers();
+        headers$.set("user-agent", SDK_METADATA.userAgent);
+        headers$.set("Content-Type", "application/json");
+        headers$.set("Accept", "application/json");
 
-        const payload = operations.EditPurchaseRequestBody$.outboundSchema.optional().parse(input);
-        const body =
-            payload === undefined ? null : enc$.encodeJSON("body", payload, { explode: true });
+        const payload$ = operations.EditPurchaseRequestBody$.outboundSchema.optional().parse(input);
+        const body$ =
+            payload$ === undefined ? null : enc$.encodeJSON("body", payload$, { explode: true });
 
-        const path = this.templateURLComponent("/purchases/edit")();
+        const path$ = this.templateURLComponent("/purchases/edit")();
 
-        const security = this.options$.oAuth2ClientCredentials
-            ? { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials }
-            : {};
-        const securitySettings = this.resolveGlobalSecurity(security);
+        let security$;
+        if (typeof this.options$.oAuth2ClientCredentials === "function") {
+            security$ = { oAuth2ClientCredentials: await this.options$.oAuth2ClientCredentials() };
+        } else if (this.options$.oAuth2ClientCredentials) {
+            security$ = { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials };
+        } else {
+            security$ = {};
+        }
+        const securitySettings$ = this.resolveGlobalSecurity(security$);
 
         const response = await this.fetch$(
-            { security: securitySettings, method: "post", path, headers, body },
+            {
+                security: securitySettings$,
+                method: "post",
+                path: path$,
+                headers: headers$,
+                body: body$,
+            },
             options
         );
 
-        const responseFields = {
+        const responseFields$ = {
             ContentType: response.headers.get("content-type") ?? "application/octet-stream",
             StatusCode: response.status,
             RawResponse: response,
@@ -274,24 +319,24 @@ export class Purchases extends ClientSDK {
         if (this.matchResponse(response, 200, "application/json")) {
             const responseBody = await response.json();
             const result = operations.EditPurchaseResponse$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 object: responseBody,
             });
             return result;
         } else if (this.matchResponse(response, 400, "application/json")) {
             const responseBody = await response.json();
             const result = errors.EditPurchaseResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.EditPurchaseResponseBody(result);
+            throw result;
         } else if (this.matchResponse(response, 401, "application/json")) {
             const responseBody = await response.json();
             const result = errors.EditPurchasePurchasesResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.EditPurchasePurchasesResponseBody(result);
+            throw result;
         } else {
             const responseBody = await response.text();
             throw new errors.SDKError("Unexpected API response", response, responseBody);
@@ -308,36 +353,47 @@ export class Purchases extends ClientSDK {
         purchaseId: string,
         options?: RequestOptions
     ): Promise<operations.GetPurchaseConsumptionResponse> {
-        const input: operations.GetPurchaseConsumptionRequest = {
+        const input$: operations.GetPurchaseConsumptionRequest = {
             purchaseId: purchaseId,
         };
-        const headers = new Headers();
-        headers.set("user-agent", SDK_METADATA.userAgent);
-        headers.set("Accept", "application/json");
+        const headers$ = new Headers();
+        headers$.set("user-agent", SDK_METADATA.userAgent);
+        headers$.set("Accept", "application/json");
 
-        const payload = operations.GetPurchaseConsumptionRequest$.outboundSchema.parse(input);
-        const body = null;
+        const payload$ = operations.GetPurchaseConsumptionRequest$.outboundSchema.parse(input$);
+        const body$ = null;
 
-        const pathParams = {
-            purchaseId: enc$.encodeSimple("purchaseId", payload.purchaseId, {
+        const pathParams$ = {
+            purchaseId: enc$.encodeSimple("purchaseId", payload$.purchaseId, {
                 explode: false,
                 charEncoding: "percent",
             }),
         };
 
-        const path = this.templateURLComponent("/purchases/{purchaseId}/consumption")(pathParams);
+        const path$ = this.templateURLComponent("/purchases/{purchaseId}/consumption")(pathParams$);
 
-        const security = this.options$.oAuth2ClientCredentials
-            ? { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials }
-            : {};
-        const securitySettings = this.resolveGlobalSecurity(security);
+        let security$;
+        if (typeof this.options$.oAuth2ClientCredentials === "function") {
+            security$ = { oAuth2ClientCredentials: await this.options$.oAuth2ClientCredentials() };
+        } else if (this.options$.oAuth2ClientCredentials) {
+            security$ = { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials };
+        } else {
+            security$ = {};
+        }
+        const securitySettings$ = this.resolveGlobalSecurity(security$);
 
         const response = await this.fetch$(
-            { security: securitySettings, method: "get", path, headers, body },
+            {
+                security: securitySettings$,
+                method: "get",
+                path: path$,
+                headers: headers$,
+                body: body$,
+            },
             options
         );
 
-        const responseFields = {
+        const responseFields$ = {
             ContentType: response.headers.get("content-type") ?? "application/octet-stream",
             StatusCode: response.status,
             RawResponse: response,
@@ -346,24 +402,24 @@ export class Purchases extends ClientSDK {
         if (this.matchResponse(response, 200, "application/json")) {
             const responseBody = await response.json();
             const result = operations.GetPurchaseConsumptionResponse$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 object: responseBody,
             });
             return result;
         } else if (this.matchResponse(response, 400, "application/json")) {
             const responseBody = await response.json();
             const result = errors.GetPurchaseConsumptionResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.GetPurchaseConsumptionResponseBody(result);
+            throw result;
         } else if (this.matchResponse(response, 401, "application/json")) {
             const responseBody = await response.json();
             const result = errors.GetPurchaseConsumptionPurchasesResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.GetPurchaseConsumptionPurchasesResponseBody(result);
+            throw result;
         } else {
             const responseBody = await response.text();
             throw new errors.SDKError("Unexpected API response", response, responseBody);

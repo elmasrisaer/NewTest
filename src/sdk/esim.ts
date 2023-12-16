@@ -25,35 +25,47 @@ export class Esim extends ClientSDK {
      * Get eSIM Status
      */
     async geteSIM(iccid: string, options?: RequestOptions): Promise<operations.GeteSIMResponse> {
-        const input: operations.GeteSIMRequest = {
+        const input$: operations.GeteSIMRequest = {
             iccid: iccid,
         };
-        const headers = new Headers();
-        headers.set("user-agent", SDK_METADATA.userAgent);
-        headers.set("Accept", "application/json");
+        const headers$ = new Headers();
+        headers$.set("user-agent", SDK_METADATA.userAgent);
+        headers$.set("Accept", "application/json");
 
-        const payload = operations.GeteSIMRequest$.outboundSchema.parse(input);
-        const body = null;
+        const payload$ = operations.GeteSIMRequest$.outboundSchema.parse(input$);
+        const body$ = null;
 
-        const path = this.templateURLComponent("/esim")();
+        const path$ = this.templateURLComponent("/esim")();
 
-        const query = [
-            enc$.encodeForm("iccid", payload.iccid, { explode: true, charEncoding: "percent" }),
+        const query$ = [
+            enc$.encodeForm("iccid", payload$.iccid, { explode: true, charEncoding: "percent" }),
         ]
             .filter(Boolean)
             .join("&");
 
-        const security = this.options$.oAuth2ClientCredentials
-            ? { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials }
-            : {};
-        const securitySettings = this.resolveGlobalSecurity(security);
+        let security$;
+        if (typeof this.options$.oAuth2ClientCredentials === "function") {
+            security$ = { oAuth2ClientCredentials: await this.options$.oAuth2ClientCredentials() };
+        } else if (this.options$.oAuth2ClientCredentials) {
+            security$ = { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials };
+        } else {
+            security$ = {};
+        }
+        const securitySettings$ = this.resolveGlobalSecurity(security$);
 
         const response = await this.fetch$(
-            { security: securitySettings, method: "get", path, headers, query, body },
+            {
+                security: securitySettings$,
+                method: "get",
+                path: path$,
+                headers: headers$,
+                query: query$,
+                body: body$,
+            },
             options
         );
 
-        const responseFields = {
+        const responseFields$ = {
             ContentType: response.headers.get("content-type") ?? "application/octet-stream",
             StatusCode: response.status,
             RawResponse: response,
@@ -62,24 +74,24 @@ export class Esim extends ClientSDK {
         if (this.matchResponse(response, 200, "application/json")) {
             const responseBody = await response.json();
             const result = operations.GeteSIMResponse$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 object: responseBody,
             });
             return result;
         } else if (this.matchResponse(response, 400, "application/json")) {
             const responseBody = await response.json();
             const result = errors.GeteSIMResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.GeteSIMResponseBody(result);
+            throw result;
         } else if (this.matchResponse(response, 401, "application/json")) {
             const responseBody = await response.json();
             const result = errors.GeteSIMESIMResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.GeteSIMESIMResponseBody(result);
+            throw result;
         } else {
             const responseBody = await response.text();
             throw new errors.SDKError("Unexpected API response", response, responseBody);
@@ -93,36 +105,47 @@ export class Esim extends ClientSDK {
         iccid: string,
         options?: RequestOptions
     ): Promise<operations.GeteSIMDeviceResponse> {
-        const input: operations.GeteSIMDeviceRequest = {
+        const input$: operations.GeteSIMDeviceRequest = {
             iccid: iccid,
         };
-        const headers = new Headers();
-        headers.set("user-agent", SDK_METADATA.userAgent);
-        headers.set("Accept", "application/json");
+        const headers$ = new Headers();
+        headers$.set("user-agent", SDK_METADATA.userAgent);
+        headers$.set("Accept", "application/json");
 
-        const payload = operations.GeteSIMDeviceRequest$.outboundSchema.parse(input);
-        const body = null;
+        const payload$ = operations.GeteSIMDeviceRequest$.outboundSchema.parse(input$);
+        const body$ = null;
 
-        const pathParams = {
-            iccid: enc$.encodeSimple("iccid", payload.iccid, {
+        const pathParams$ = {
+            iccid: enc$.encodeSimple("iccid", payload$.iccid, {
                 explode: false,
                 charEncoding: "percent",
             }),
         };
 
-        const path = this.templateURLComponent("/esim/{iccid}/device")(pathParams);
+        const path$ = this.templateURLComponent("/esim/{iccid}/device")(pathParams$);
 
-        const security = this.options$.oAuth2ClientCredentials
-            ? { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials }
-            : {};
-        const securitySettings = this.resolveGlobalSecurity(security);
+        let security$;
+        if (typeof this.options$.oAuth2ClientCredentials === "function") {
+            security$ = { oAuth2ClientCredentials: await this.options$.oAuth2ClientCredentials() };
+        } else if (this.options$.oAuth2ClientCredentials) {
+            security$ = { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials };
+        } else {
+            security$ = {};
+        }
+        const securitySettings$ = this.resolveGlobalSecurity(security$);
 
         const response = await this.fetch$(
-            { security: securitySettings, method: "get", path, headers, body },
+            {
+                security: securitySettings$,
+                method: "get",
+                path: path$,
+                headers: headers$,
+                body: body$,
+            },
             options
         );
 
-        const responseFields = {
+        const responseFields$ = {
             ContentType: response.headers.get("content-type") ?? "application/octet-stream",
             StatusCode: response.status,
             RawResponse: response,
@@ -131,24 +154,24 @@ export class Esim extends ClientSDK {
         if (this.matchResponse(response, 200, "application/json")) {
             const responseBody = await response.json();
             const result = operations.GeteSIMDeviceResponse$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 object: responseBody,
             });
             return result;
         } else if (this.matchResponse(response, 400, "application/json")) {
             const responseBody = await response.json();
             const result = errors.GeteSIMDeviceResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.GeteSIMDeviceResponseBody(result);
+            throw result;
         } else if (this.matchResponse(response, 401, "application/json")) {
             const responseBody = await response.json();
             const result = errors.GeteSIMDeviceESIMResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.GeteSIMDeviceESIMResponseBody(result);
+            throw result;
         } else {
             const responseBody = await response.text();
             throw new errors.SDKError("Unexpected API response", response, responseBody);
@@ -162,36 +185,47 @@ export class Esim extends ClientSDK {
         iccid: string,
         options?: RequestOptions
     ): Promise<operations.GeteSIMHistoryResponse> {
-        const input: operations.GeteSIMHistoryRequest = {
+        const input$: operations.GeteSIMHistoryRequest = {
             iccid: iccid,
         };
-        const headers = new Headers();
-        headers.set("user-agent", SDK_METADATA.userAgent);
-        headers.set("Accept", "application/json");
+        const headers$ = new Headers();
+        headers$.set("user-agent", SDK_METADATA.userAgent);
+        headers$.set("Accept", "application/json");
 
-        const payload = operations.GeteSIMHistoryRequest$.outboundSchema.parse(input);
-        const body = null;
+        const payload$ = operations.GeteSIMHistoryRequest$.outboundSchema.parse(input$);
+        const body$ = null;
 
-        const pathParams = {
-            iccid: enc$.encodeSimple("iccid", payload.iccid, {
+        const pathParams$ = {
+            iccid: enc$.encodeSimple("iccid", payload$.iccid, {
                 explode: false,
                 charEncoding: "percent",
             }),
         };
 
-        const path = this.templateURLComponent("/esim/{iccid}/history")(pathParams);
+        const path$ = this.templateURLComponent("/esim/{iccid}/history")(pathParams$);
 
-        const security = this.options$.oAuth2ClientCredentials
-            ? { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials }
-            : {};
-        const securitySettings = this.resolveGlobalSecurity(security);
+        let security$;
+        if (typeof this.options$.oAuth2ClientCredentials === "function") {
+            security$ = { oAuth2ClientCredentials: await this.options$.oAuth2ClientCredentials() };
+        } else if (this.options$.oAuth2ClientCredentials) {
+            security$ = { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials };
+        } else {
+            security$ = {};
+        }
+        const securitySettings$ = this.resolveGlobalSecurity(security$);
 
         const response = await this.fetch$(
-            { security: securitySettings, method: "get", path, headers, body },
+            {
+                security: securitySettings$,
+                method: "get",
+                path: path$,
+                headers: headers$,
+                body: body$,
+            },
             options
         );
 
-        const responseFields = {
+        const responseFields$ = {
             ContentType: response.headers.get("content-type") ?? "application/octet-stream",
             StatusCode: response.status,
             RawResponse: response,
@@ -200,24 +234,24 @@ export class Esim extends ClientSDK {
         if (this.matchResponse(response, 200, "application/json")) {
             const responseBody = await response.json();
             const result = operations.GeteSIMHistoryResponse$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 object: responseBody,
             });
             return result;
         } else if (this.matchResponse(response, 400, "application/json")) {
             const responseBody = await response.json();
             const result = errors.GeteSIMHistoryResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.GeteSIMHistoryResponseBody(result);
+            throw result;
         } else if (this.matchResponse(response, 401, "application/json")) {
             const responseBody = await response.json();
             const result = errors.GeteSIMHistoryESIMResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.GeteSIMHistoryESIMResponseBody(result);
+            throw result;
         } else {
             const responseBody = await response.text();
             throw new errors.SDKError("Unexpected API response", response, responseBody);
@@ -231,36 +265,47 @@ export class Esim extends ClientSDK {
         iccid: string,
         options?: RequestOptions
     ): Promise<operations.GeteSIMMacResponse> {
-        const input: operations.GeteSIMMacRequest = {
+        const input$: operations.GeteSIMMacRequest = {
             iccid: iccid,
         };
-        const headers = new Headers();
-        headers.set("user-agent", SDK_METADATA.userAgent);
-        headers.set("Accept", "application/json");
+        const headers$ = new Headers();
+        headers$.set("user-agent", SDK_METADATA.userAgent);
+        headers$.set("Accept", "application/json");
 
-        const payload = operations.GeteSIMMacRequest$.outboundSchema.parse(input);
-        const body = null;
+        const payload$ = operations.GeteSIMMacRequest$.outboundSchema.parse(input$);
+        const body$ = null;
 
-        const pathParams = {
-            iccid: enc$.encodeSimple("iccid", payload.iccid, {
+        const pathParams$ = {
+            iccid: enc$.encodeSimple("iccid", payload$.iccid, {
                 explode: false,
                 charEncoding: "percent",
             }),
         };
 
-        const path = this.templateURLComponent("/esim/{iccid}/mac")(pathParams);
+        const path$ = this.templateURLComponent("/esim/{iccid}/mac")(pathParams$);
 
-        const security = this.options$.oAuth2ClientCredentials
-            ? { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials }
-            : {};
-        const securitySettings = this.resolveGlobalSecurity(security);
+        let security$;
+        if (typeof this.options$.oAuth2ClientCredentials === "function") {
+            security$ = { oAuth2ClientCredentials: await this.options$.oAuth2ClientCredentials() };
+        } else if (this.options$.oAuth2ClientCredentials) {
+            security$ = { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials };
+        } else {
+            security$ = {};
+        }
+        const securitySettings$ = this.resolveGlobalSecurity(security$);
 
         const response = await this.fetch$(
-            { security: securitySettings, method: "get", path, headers, body },
+            {
+                security: securitySettings$,
+                method: "get",
+                path: path$,
+                headers: headers$,
+                body: body$,
+            },
             options
         );
 
-        const responseFields = {
+        const responseFields$ = {
             ContentType: response.headers.get("content-type") ?? "application/octet-stream",
             StatusCode: response.status,
             RawResponse: response,
@@ -269,24 +314,24 @@ export class Esim extends ClientSDK {
         if (this.matchResponse(response, 200, "application/json")) {
             const responseBody = await response.json();
             const result = operations.GeteSIMMacResponse$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 object: responseBody,
             });
             return result;
         } else if (this.matchResponse(response, 400, "application/json")) {
             const responseBody = await response.json();
             const result = errors.GeteSIMMacResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.GeteSIMMacResponseBody(result);
+            throw result;
         } else if (this.matchResponse(response, 401, "application/json")) {
             const responseBody = await response.json();
             const result = errors.GeteSIMMacESIMResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.GeteSIMMacESIMResponseBody(result);
+            throw result;
         } else {
             const responseBody = await response.text();
             throw new errors.SDKError("Unexpected API response", response, responseBody);

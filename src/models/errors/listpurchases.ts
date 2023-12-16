@@ -96,22 +96,52 @@ export namespace ListPurchasesPurchasesResponseBody$ {
         message?: string | undefined;
         RawResponse?: Response | undefined;
     };
-    export type Outbound = {
-        message?: string | undefined;
-        rawResponse?: Response | undefined;
-    };
 
-    export const inboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<
+        ListPurchasesPurchasesResponseBody,
+        z.ZodTypeDef,
+        Inbound
+    > = z
         .object({
             message: z.string().optional(),
             RawResponse: z.instanceof(Response).optional(),
         })
         .transform((v) => {
-            return {
+            return new ListPurchasesPurchasesResponseBody({
                 ...(v.message === undefined ? null : { message: v.message }),
                 ...(v.RawResponse === undefined ? null : { rawResponse: v.RawResponse }),
-            };
+            });
         });
+    export type Outbound = {
+        message?: string | undefined;
+        RawResponse?: never | undefined;
+    };
+
+    export const outboundSchema: z.ZodType<
+        Outbound,
+        z.ZodTypeDef,
+        ListPurchasesPurchasesResponseBody
+    > = z
+        .instanceof(ListPurchasesPurchasesResponseBody)
+        .transform((v) => v.data$)
+        .pipe(
+            z
+                .object({
+                    message: z.string().optional(),
+                    rawResponse: z
+                        .instanceof(Response)
+                        .transform(() => {
+                            throw new Error("Response cannot be serialized");
+                        })
+                        .optional(),
+                })
+                .transform((v) => {
+                    return {
+                        ...(v.message === undefined ? null : { message: v.message }),
+                        ...(v.rawResponse === undefined ? null : { RawResponse: v.rawResponse }),
+                    };
+                })
+        );
 }
 
 /** @internal */
@@ -120,20 +150,42 @@ export namespace ListPurchasesResponseBody$ {
         message?: string | undefined;
         RawResponse?: Response | undefined;
     };
-    export type Outbound = {
-        message?: string | undefined;
-        rawResponse?: Response | undefined;
-    };
 
-    export const inboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<ListPurchasesResponseBody, z.ZodTypeDef, Inbound> = z
         .object({
             message: z.string().optional(),
             RawResponse: z.instanceof(Response).optional(),
         })
         .transform((v) => {
-            return {
+            return new ListPurchasesResponseBody({
                 ...(v.message === undefined ? null : { message: v.message }),
                 ...(v.RawResponse === undefined ? null : { rawResponse: v.RawResponse }),
-            };
+            });
         });
+    export type Outbound = {
+        message?: string | undefined;
+        RawResponse?: never | undefined;
+    };
+
+    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, ListPurchasesResponseBody> = z
+        .instanceof(ListPurchasesResponseBody)
+        .transform((v) => v.data$)
+        .pipe(
+            z
+                .object({
+                    message: z.string().optional(),
+                    rawResponse: z
+                        .instanceof(Response)
+                        .transform(() => {
+                            throw new Error("Response cannot be serialized");
+                        })
+                        .optional(),
+                })
+                .transform((v) => {
+                    return {
+                        ...(v.message === undefined ? null : { message: v.message }),
+                        ...(v.rawResponse === undefined ? null : { RawResponse: v.rawResponse }),
+                    };
+                })
+        );
 }

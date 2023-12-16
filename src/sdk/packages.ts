@@ -28,36 +28,42 @@ export class Packages extends ClientSDK {
         input: operations.GetPackagesRequest,
         options?: RequestOptions
     ): Promise<operations.GetPackagesResponse> {
-        const headers = new Headers();
-        headers.set("user-agent", SDK_METADATA.userAgent);
-        headers.set("Accept", "application/json");
+        const headers$ = new Headers();
+        headers$.set("user-agent", SDK_METADATA.userAgent);
+        headers$.set("Accept", "application/json");
 
-        const payload = operations.GetPackagesRequest$.outboundSchema.parse(input);
-        const body = null;
+        const payload$ = operations.GetPackagesRequest$.outboundSchema.parse(input);
+        const body$ = null;
 
-        const path = this.templateURLComponent("/packages")();
+        const path$ = this.templateURLComponent("/packages")();
 
-        const query = [
-            enc$.encodeForm("afterCursor", payload.afterCursor, {
+        const query$ = [
+            enc$.encodeForm("afterCursor", payload$.afterCursor, {
                 explode: true,
                 charEncoding: "percent",
             }),
-            enc$.encodeForm("destination", payload.destination, {
+            enc$.encodeForm("destination", payload$.destination, {
                 explode: true,
                 charEncoding: "percent",
             }),
-            enc$.encodeForm("duration", payload.duration, {
+            enc$.encodeForm("duration", payload$.duration, {
                 explode: true,
                 charEncoding: "percent",
             }),
-            enc$.encodeForm("endDate", payload.endDate, { explode: true, charEncoding: "percent" }),
-            enc$.encodeForm("endTime", payload.endTime, { explode: true, charEncoding: "percent" }),
-            enc$.encodeForm("limit", payload.limit, { explode: true, charEncoding: "percent" }),
-            enc$.encodeForm("startDate", payload.startDate, {
+            enc$.encodeForm("endDate", payload$.endDate, {
                 explode: true,
                 charEncoding: "percent",
             }),
-            enc$.encodeForm("startTime", payload.startTime, {
+            enc$.encodeForm("endTime", payload$.endTime, {
+                explode: true,
+                charEncoding: "percent",
+            }),
+            enc$.encodeForm("limit", payload$.limit, { explode: true, charEncoding: "percent" }),
+            enc$.encodeForm("startDate", payload$.startDate, {
+                explode: true,
+                charEncoding: "percent",
+            }),
+            enc$.encodeForm("startTime", payload$.startTime, {
                 explode: true,
                 charEncoding: "percent",
             }),
@@ -65,17 +71,29 @@ export class Packages extends ClientSDK {
             .filter(Boolean)
             .join("&");
 
-        const security = this.options$.oAuth2ClientCredentials
-            ? { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials }
-            : {};
-        const securitySettings = this.resolveGlobalSecurity(security);
+        let security$;
+        if (typeof this.options$.oAuth2ClientCredentials === "function") {
+            security$ = { oAuth2ClientCredentials: await this.options$.oAuth2ClientCredentials() };
+        } else if (this.options$.oAuth2ClientCredentials) {
+            security$ = { oAuth2ClientCredentials: this.options$.oAuth2ClientCredentials };
+        } else {
+            security$ = {};
+        }
+        const securitySettings$ = this.resolveGlobalSecurity(security$);
 
         const response = await this.fetch$(
-            { security: securitySettings, method: "get", path, headers, query, body },
+            {
+                security: securitySettings$,
+                method: "get",
+                path: path$,
+                headers: headers$,
+                query: query$,
+                body: body$,
+            },
             options
         );
 
-        const responseFields = {
+        const responseFields$ = {
             ContentType: response.headers.get("content-type") ?? "application/octet-stream",
             StatusCode: response.status,
             RawResponse: response,
@@ -84,24 +102,24 @@ export class Packages extends ClientSDK {
         if (this.matchResponse(response, 200, "application/json")) {
             const responseBody = await response.json();
             const result = operations.GetPackagesResponse$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 object: responseBody,
             });
             return result;
         } else if (this.matchResponse(response, 400, "application/json")) {
             const responseBody = await response.json();
             const result = errors.GetPackagesResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.GetPackagesResponseBody(result);
+            throw result;
         } else if (this.matchResponse(response, 401, "application/json")) {
             const responseBody = await response.json();
             const result = errors.GetPackagesPackagesResponseBody$.inboundSchema.parse({
-                ...responseFields,
+                ...responseFields$,
                 ...responseBody,
             });
-            throw new errors.GetPackagesPackagesResponseBody(result);
+            throw result;
         } else {
             const responseBody = await response.text();
             throw new errors.SDKError("Unexpected API response", response, responseBody);
