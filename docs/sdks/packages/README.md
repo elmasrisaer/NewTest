@@ -21,20 +21,19 @@ import { RFCDate } from "CELITECH/types";
 
 async function run() {
   const sdk = new Celitech({
-      oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
-    });
+    oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
+  });
 
-  
   const res = await sdk.packages.getPackages({
-      destination: "FRA",
-      startDate: new RFCDate("2023-11-01T00:00:00Z"),
-      endDate: new RFCDate("2023-11-20T00:00:00Z"),
-      afterCursor: "Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA",
-      limit: 20,
-      startTime: 1672052449,
-      endTime: 1672396681,
-      duration: 344232,
-    });
+    destination: "FRA",
+    startDate: new RFCDate("2023-11-01T00:00:00Z"),
+    endDate: new RFCDate("2023-11-20T00:00:00Z"),
+    afterCursor: "Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA",
+    limit: 20,
+    startTime: 1672052449,
+    endTime: 1672396681,
+    duration: 344232,
+  });
 
   if (res?.statusCode !== 200) {
     throw new Error("Unexpected status code: " + res?.statusCode || "-");
@@ -64,4 +63,4 @@ run();
 | -------------------------------------- | -------------------------------------- | -------------------------------------- |
 | errors.GetPackagesResponseBody         | 400                                    | application/json                       |
 | errors.GetPackagesPackagesResponseBody | 401                                    | application/json                       |
-| errors.SDKError                        | 400-600                                | */*                                    |
+| errors.SDKError                        | 4xx-5xx                                | */*                                    |

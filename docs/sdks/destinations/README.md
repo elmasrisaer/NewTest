@@ -20,10 +20,9 @@ import { Celitech } from "CELITECH";
 
 async function run() {
   const sdk = new Celitech({
-      oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
-    });
+    oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
+  });
 
-  
   const res = await sdk.destinations.getDestinations();
 
   if (res?.statusCode !== 200) {
@@ -53,4 +52,4 @@ run();
 | ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
 | errors.GetDestinationsResponseBody             | 400                                            | application/json                               |
 | errors.GetDestinationsDestinationsResponseBody | 401                                            | application/json                               |
-| errors.SDKError                                | 400-600                                        | */*                                            |
+| errors.SDKError                                | 4xx-5xx                                        | */*                                            |

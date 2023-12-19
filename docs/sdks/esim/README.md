@@ -23,10 +23,11 @@ import { Celitech } from "CELITECH";
 
 async function run() {
   const sdk = new Celitech({
-      oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
-    });
+    oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
+  });
 
   const iccid = "1111222233334444555";
+  
   const res = await sdk.eSIM.geteSIM(iccid);
 
   if (res?.statusCode !== 200) {
@@ -57,7 +58,7 @@ run();
 | ------------------------------ | ------------------------------ | ------------------------------ |
 | errors.GeteSIMResponseBody     | 400                            | application/json               |
 | errors.GeteSIMESIMResponseBody | 401                            | application/json               |
-| errors.SDKError                | 400-600                        | */*                            |
+| errors.SDKError                | 4xx-5xx                        | */*                            |
 
 ## geteSIMDevice
 
@@ -70,10 +71,11 @@ import { Celitech } from "CELITECH";
 
 async function run() {
   const sdk = new Celitech({
-      oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
-    });
+    oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
+  });
 
   const iccid = "1111222233334444555";
+  
   const res = await sdk.eSIM.geteSIMDevice(iccid);
 
   if (res?.statusCode !== 200) {
@@ -104,7 +106,7 @@ run();
 | ------------------------------------ | ------------------------------------ | ------------------------------------ |
 | errors.GeteSIMDeviceResponseBody     | 400                                  | application/json                     |
 | errors.GeteSIMDeviceESIMResponseBody | 401                                  | application/json                     |
-| errors.SDKError                      | 400-600                              | */*                                  |
+| errors.SDKError                      | 4xx-5xx                              | */*                                  |
 
 ## geteSIMHistory
 
@@ -117,10 +119,11 @@ import { Celitech } from "CELITECH";
 
 async function run() {
   const sdk = new Celitech({
-      oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
-    });
+    oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
+  });
 
   const iccid = "1111222233334444555";
+  
   const res = await sdk.eSIM.geteSIMHistory(iccid);
 
   if (res?.statusCode !== 200) {
@@ -151,7 +154,7 @@ run();
 | ------------------------------------- | ------------------------------------- | ------------------------------------- |
 | errors.GeteSIMHistoryResponseBody     | 400                                   | application/json                      |
 | errors.GeteSIMHistoryESIMResponseBody | 401                                   | application/json                      |
-| errors.SDKError                       | 400-600                               | */*                                   |
+| errors.SDKError                       | 4xx-5xx                               | */*                                   |
 
 ## geteSIMMac
 
@@ -164,10 +167,11 @@ import { Celitech } from "CELITECH";
 
 async function run() {
   const sdk = new Celitech({
-      oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
-    });
+    oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
+  });
 
   const iccid = "1111222233334444555";
+  
   const res = await sdk.eSIM.geteSIMMac(iccid);
 
   if (res?.statusCode !== 200) {
@@ -198,4 +202,4 @@ run();
 | --------------------------------- | --------------------------------- | --------------------------------- |
 | errors.GeteSIMMacResponseBody     | 400                               | application/json                  |
 | errors.GeteSIMMacESIMResponseBody | 401                               | application/json                  |
-| errors.SDKError                   | 400-600                           | */*                               |
+| errors.SDKError                   | 4xx-5xx                           | */*                               |

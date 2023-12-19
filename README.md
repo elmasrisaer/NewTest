@@ -95,7 +95,7 @@ All SDK methods return a response object or throw an error. If Error objects are
 | ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
 | errors.GetDestinationsResponseBody             | 400                                            | application/json                               |
 | errors.GetDestinationsDestinationsResponseBody | 401                                            | application/json                               |
-| errors.SDKError                                | 400-600                                        | */*                                            |
+| errors.SDKError                                | 4xx-5xx                                        | */*                                            |
 
 Example
 

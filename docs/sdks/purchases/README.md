@@ -25,20 +25,19 @@ import { RFCDate } from "CELITECH/types";
 
 async function run() {
   const sdk = new Celitech({
-      oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
-    });
+    oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
+  });
 
-  
   const res = await sdk.purchases.createPurchase({
-      destination: "FRA",
-      dataLimitInGB: 1,
-      startDate: new RFCDate("2023-11-01T00:00:00Z"),
-      endDate: new RFCDate("2023-11-20T00:00:00Z"),
-      email: "example@domain.com",
-      networkBrand: "CELITECH",
-      startTime: 1672051891,
-      endTime: 1672396681,
-    });
+    destination: "FRA",
+    dataLimitInGB: 1,
+    startDate: new RFCDate("2023-11-01T00:00:00Z"),
+    endDate: new RFCDate("2023-11-20T00:00:00Z"),
+    email: "example@domain.com",
+    networkBrand: "CELITECH",
+    startTime: 1672051891,
+    endTime: 1672396681,
+  });
 
   if (res?.statusCode !== 200) {
     throw new Error("Unexpected status code: " + res?.statusCode || "-");
@@ -68,7 +67,7 @@ run();
 | ------------------------------------------ | ------------------------------------------ | ------------------------------------------ |
 | errors.CreatePurchaseResponseBody          | 400                                        | application/json                           |
 | errors.CreatePurchasePurchasesResponseBody | 401                                        | application/json                           |
-| errors.SDKError                            | 400-600                                    | */*                                        |
+| errors.SDKError                            | 4xx-5xx                                    | */*                                        |
 
 ## listPurchases
 
@@ -82,19 +81,18 @@ import { RFCDate } from "CELITECH/types";
 
 async function run() {
   const sdk = new Celitech({
-      oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
-    });
+    oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
+  });
 
-  
   const res = await sdk.purchases.listPurchases({
-      iccid: "1111222233334444555",
-      afterDate: new RFCDate("2023-11-01T00:00:00Z"),
-      beforeDate: new RFCDate("2023-11-20T00:00:00Z"),
-      afterCursor: "Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA",
-      limit: 20,
-      after: 1672052365,
-      before: 1672396681,
-    });
+    iccid: "1111222233334444555",
+    afterDate: new RFCDate("2023-11-01T00:00:00Z"),
+    beforeDate: new RFCDate("2023-11-20T00:00:00Z"),
+    afterCursor: "Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA",
+    limit: 20,
+    after: 1672052365,
+    before: 1672396681,
+  });
 
   if (res?.statusCode !== 200) {
     throw new Error("Unexpected status code: " + res?.statusCode || "-");
@@ -124,7 +122,7 @@ run();
 | ----------------------------------------- | ----------------------------------------- | ----------------------------------------- |
 | errors.ListPurchasesResponseBody          | 400                                       | application/json                          |
 | errors.ListPurchasesPurchasesResponseBody | 401                                       | application/json                          |
-| errors.SDKError                           | 400-600                                   | */*                                       |
+| errors.SDKError                           | 4xx-5xx                                   | */*                                       |
 
 ## topUpeSIM
 
@@ -138,19 +136,18 @@ import { RFCDate } from "CELITECH/types";
 
 async function run() {
   const sdk = new Celitech({
-      oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
-    });
+    oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
+  });
 
-  
   const res = await sdk.purchases.topUpeSIM({
-      iccid: "1111222233334444555",
-      dataLimitInGB: 1,
-      startDate: new RFCDate("2023-11-01T00:00:00Z"),
-      endDate: new RFCDate("2023-11-20T00:00:00Z"),
-      email: "example@domain.com",
-      startTime: 1672051891,
-      endTime: 1672396681,
-    });
+    iccid: "1111222233334444555",
+    dataLimitInGB: 1,
+    startDate: new RFCDate("2023-11-01T00:00:00Z"),
+    endDate: new RFCDate("2023-11-20T00:00:00Z"),
+    email: "example@domain.com",
+    startTime: 1672051891,
+    endTime: 1672396681,
+  });
 
   if (res?.statusCode !== 200) {
     throw new Error("Unexpected status code: " + res?.statusCode || "-");
@@ -180,7 +177,7 @@ run();
 | ------------------------------------- | ------------------------------------- | ------------------------------------- |
 | errors.TopUpeSIMResponseBody          | 400                                   | application/json                      |
 | errors.TopUpeSIMPurchasesResponseBody | 401                                   | application/json                      |
-| errors.SDKError                       | 400-600                               | */*                                   |
+| errors.SDKError                       | 4xx-5xx                               | */*                                   |
 
 ## editPurchase
 
@@ -194,17 +191,16 @@ import { RFCDate } from "CELITECH/types";
 
 async function run() {
   const sdk = new Celitech({
-      oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
-    });
+    oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
+  });
 
-  
   const res = await sdk.purchases.editPurchase({
-      purchaseId: "ae471106-c8b4-42cf-b83a-b061291f2922",
-      startDate: new RFCDate("2023-11-01T00:00:00Z"),
-      endDate: 2023-11-20T00:00:00Z,
-      startTime: 1672051891,
-      endTime: 1672396681,
-    });
+    purchaseId: "ae471106-c8b4-42cf-b83a-b061291f2922",
+    startDate: new RFCDate("2023-11-01T00:00:00Z"),
+    endDate: 2023-11-20T00:00:00Z,
+    startTime: 1672051891,
+    endTime: 1672396681,
+  });
 
   if (res?.statusCode !== 200) {
     throw new Error("Unexpected status code: " + res?.statusCode || "-");
@@ -234,7 +230,7 @@ run();
 | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
 | errors.EditPurchaseResponseBody          | 400                                      | application/json                         |
 | errors.EditPurchasePurchasesResponseBody | 401                                      | application/json                         |
-| errors.SDKError                          | 400-600                                  | */*                                      |
+| errors.SDKError                          | 4xx-5xx                                  | */*                                      |
 
 ## getPurchaseConsumption
 
@@ -247,10 +243,11 @@ import { Celitech } from "CELITECH";
 
 async function run() {
   const sdk = new Celitech({
-      oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
-    });
+    oAuth2ClientCredentials: "Bearer <YOUR_ACCESS_TOKEN_HERE>",
+  });
 
   const purchaseId = "4973fa15-6979-4daa-9cf3-672620df819c";
+  
   const res = await sdk.purchases.getPurchaseConsumption(purchaseId);
 
   if (res?.statusCode !== 200) {
@@ -281,4 +278,4 @@ run();
 | -------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------- |
 | errors.GetPurchaseConsumptionResponseBody          | 400                                                | application/json                                   |
 | errors.GetPurchaseConsumptionPurchasesResponseBody | 401                                                | application/json                                   |
-| errors.SDKError                                    | 400-600                                            | */*                                                |
+| errors.SDKError                                    | 4xx-5xx                                            | */*                                                |
