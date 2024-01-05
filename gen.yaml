@@ -1,25 +1,11 @@
-configVersion: 1.0.0
-management:
-  docChecksum: 8717c790b74463bbfa787705b41c21b7
-  docVersion: 1.1.0
-  speakeasyVersion: 1.129.1
-  generationVersion: 2.223.3
+configVersion: 2.0.0
 generation:
-  comments: {}
   sdkClassName: CELITECH
-  repoURL: https://github.com/elmasrisaer/NewTest.git
   maintainOpenAPIOrder: true
   usageSnippets:
     optionalPropertyRendering: withExample
   fixes:
     nameResolutionDec2023: false
-features:
-  typescript:
-    core: 3.3.12
-    deprecations: 2.81.1
-    flattening: 2.81.1
-    globalSecurity: 2.82.2
-    globalServerURLs: 2.82.1
 typescript:
   version: 0.1.4
   author: Test2
@@ -34,9 +20,7 @@ typescript:
       shared: models/components
       webhooks: models/webhooks
   inputModelSuffix: input
-  installationURL: https://github.com/elmasrisaer/NewTest
   maxMethodParams: 4
   outputModelSuffix: output
   packageName: CELITECH
-  repoSubDirectory: .
   templateVersion: v2
