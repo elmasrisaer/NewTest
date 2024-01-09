@@ -7,7 +7,7 @@ generation:
   fixes:
     nameResolutionDec2023: false
 typescript:
-  version: 0.1.4
+  version: 0.1.5
   author: Test2
   clientServerStatusCodesAsErrors: true
   flattenGlobalSecurity: true
